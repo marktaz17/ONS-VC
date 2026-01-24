@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- <a href="{% static 'ONS/your_document.pdf' %}" target="_blank">Download PDF</a> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
+<style>
+    * {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-size: 12px;
+    }
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 98%;
+    }
+
+    .fixed-button-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .table-container {
+        margin-top: 70px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        position: relative;
+    }
+
+    #example {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #example thead th,
+    #example tfoot th {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+    }
+
+    #example tfoot th {
+        bottom: 0;
+        z-index: 10;
+    }
+
+    #example th, #example td {
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+    }
+    tfoot {
+        display: table-header-group;
+        text-align: left;
+    }
+    td {
+        text-align: left;
+    }
+</style>
+
+{% if user.is_authenticated %}
+<h3>
+    PENDING NOTICE
+</h3>
+<br>
+<table id="example" class="display table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="text-align: center;">Pin</th>
+            <th style="text-align: center;">Building Owner</th>
+            <th style="text-align: center;">Barangay</th>
+            <th style="text-align: center;">2ND NOTICE</th>
+            <th style="text-align: center;">3RD NOTICE</th>
+            <th style="text-align: center;">FOR LEGAL</th>
+            <th style="text-align: center;">Action</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+    {% for notices in pending_notice %}
+        <tr>
+            <td style="text-align: left; text-align: center;">{{ notices.pin_number }}</td>
+            <td style="text-align: left;">{{ notices.building_owner }}</td>
+            <td style="text-align: left; text-align: center;">{{ notices.brgy_pin }}</td>
+            <td style="text-align: center;">
+                <!-- delete the 'notices.second_notice_date >= compare_date and' by next year  -->
+                {% if notices.second_notice_date >= compare_date and notices.second_notice_date < today and notices.second_notice_print_history == "" %}
+                    NEED TO PRINT
+                {% else %}
+                {% endif %}
+            </td>
+            <td style="text-align: center;">
+                <!-- delete the 'notices.third_notice_date >= compare_date and' by next year  -->
+                {% if notices.third_notice_date >= compare_date and notices.third_notice_date < today and notices.third_notice_print_history == "" %}
+                NEED TO PRINT
+                {% else %}
+                {% endif %}
+            </td>
+            <td style="text-align: center;">
+                <!-- delete the 'notices.for_legal_notice_date >= compare_date and' by next year  -->
+                {% if notices.for_legal_notice_date >= compare_date and notices.for_legal_notice_date < today and notices.for_legal_notice_print_history == "" %}
+                NEED TO PRINT
+                {% else %}
+                {% endif %}
+            </td>
+            <td style="text-align: center;">
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'update' notices.id %}">Edit</a></li>
+                        <li>
+
+                            <!-- <a class="dropdown-item" href="{% url 'print_pending_notice' notices.id %}" target="_blank">Print</a> -->
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#printModal{{ notices.id }}">Print</a>                      
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <!-- First Modal for Print Confirmation -->
+        <div class="modal fade" id="printModal{{ notices.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="printModalLabel{{ notices.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="printModalLabel{{ notices.id }}">Confirm Print</h5>
+                        <button type="button" title="Close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to print all notices?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="confirmPrint{{ notices.id }}">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Modal for Print Success -->
+        <div class="modal fade" id="successModal{{ notices.id }}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="successModalLabel{{ notices.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel{{ notices.id }}">Print Successful?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Was the print successful?
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" name="">Yes</button> -->
+                        <form method="POST" action="{% url 'pending_notice' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal" name="unsuccessful_print">No</button>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" name="successful_print">Yes</button>
+                        </form>
+                        <!-- <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="handlePrintSuccess('{{ notices.id }}')">Yes</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('confirmPrint{{ notices.id }}').addEventListener('click', function () {
+                // Hide the first modal
+                const printModal = bootstrap.Modal.getInstance(document.getElementById('printModal{{ notices.id }}'));
+                printModal.hide();
+        
+                // Trigger the print action
+                window.open("{% url 'print_pending_notice' notices.id %}", '_blank');
+        
+                // Show the second modal after a short delay
+                setTimeout(() => {
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal{{ notices.id }}'));
+                    successModal.show();
+                }, 1000); // Adjust the delay as needed
+            });
+        
+            // function handlePrintSuccess(noticeId) {
+            //     // Logic to handle the success response, e.g., sending data to the server
+            //     console.log('Print was successful for notice ID:', noticeId);
+            //     // You can also close the modal or take any other action here
+            // }
+        </script>
+        
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script>
+    new DataTable('#example', {
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+                    let title = column.footer().textContent;
+
+                    // Create input element
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    column.footer().replaceChildren(input);
+
+                    // Event listener for user input
+                    input.addEventListener('keyup', () => {
+                        if (column.search() !== this.value) {
+                            column.search(input.value).draw();
+                        }
+                    });
+                });
+        }
+    });
+
+    
+</script>
+<!-- <script>
+    window.onload = function() {
+        window.print();
+    };
+</script> -->
+
+{% endblock %}

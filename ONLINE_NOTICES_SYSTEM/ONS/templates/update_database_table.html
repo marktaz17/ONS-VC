@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- <div class="col-md-6 offset-md-3"> -->
+<!-- <h1>Add Record</h1> -->
+<style>
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 98%;
+    }
+    .box-shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    }
+    * { /*FONT FOR FIELD*/
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-size: 13px;
+    }
+    body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            width: 30%; /* Adjust the width as needed */
+            margin-right: 10px;
+        }
+        .form-group input, .form-group select {
+            width: 65%; /* Adjust the width as needed */
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+</style>
+<body>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <button class="btn btn-success" style="float: right;" type="submit">Update Record</button>
+    <br>
+<table>
+    <tbody>
+        <!-- <tr>
+            <td>Cavite Pin</td>
+            <td>{{ form.cavite_pin }}</td>
+        </tr> -->
+        <!-- <tr>-->
+        <!--    <td>TimeStamp</td>-->
+        <!--    <td>{{ form.created_at }}</td>-->
+        <!--</tr>-->
+         <tr>
+            <td>Encoder</td>
+            <td>{{ form.created_by }}</td>
+        </tr>
+        <tr>
+            <td>District Pin</td>
+            <td>{{ form.district_pin }}</td>
+        </tr>
+        <tr>
+            <td>Brgy Pin</td>
+            <td>{{ form.brgy_pin }}</td>
+        </tr>
+        <tr>
+            <td>Section Pin</td>
+            <td>{{ form.section_pin }}</td>
+        </tr>
+        <tr>
+            <td>Lot Pin</td>
+            <td>{{ form.lot_pin }}</td>
+        </tr>
+        <tr>
+            <td>Building Pin</td>
+            <td>{{ form.building_pin }}</td>
+        </tr>
+        <tr>
+            <td>Pin Number</td>
+            <td>{{ form.pin_number }}</td>
+        </tr>
+        <tr>
+            <td>Lot Owner</td>
+            <td>{{ form.lot_owner }}</td>
+        </tr>
+        <tr>
+            <td>Building Owner</td>
+            <td>{{ form.building_owner }}</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>{{ form.address }}</td>
+        </tr>
+        <tr>
+            <td>Contact Number</td>
+            <td>{{ form.contact_number }}</td>
+        </tr>
+        <tr>
+            <td>Occupancy Permit</td>
+            <td>{{ form.occupancy_permit }}</td>
+        </tr>
+        <tr>
+            <td>Electrical Permit</td>
+            <td>{{ form.electrical_permit }}</td>
+        </tr>
+        <tr>
+            <td>First Notice Date</td>
+            <td>{{ form.first_notice_date }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ form.status }}</td>
+        </tr>
+        <tr>
+            <td>Comment</td>
+            <td>{{ form.comment }}</td>
+        </tr>
+        <tr>
+            <td>Second Notice Date</td>
+            <td>{{ form.second_notice_date }}</td>
+        </tr>
+        <tr>
+            <td>Second Status</td>
+            <td>{{ form.second_status }}</td>
+        </tr>
+        <tr>
+            <td>Second Comment</td>
+            <td>{{ form.second_comment }}</td>
+        </tr>
+        <tr>
+            <td>Third Notice Date</td>
+            <td>{{ form.third_notice_date }}</td>
+        </tr>
+        <tr>
+            <td>Third Status</td>
+            <td>{{ form.third_status }}</td>
+        </tr>
+        <tr>
+            <td>Third Comment</td>
+            <td>{{ form.third_comment }}</td>
+        </tr>
+        <tr>
+            <td>For Legal Notice Date</td>
+            <td>{{ form.for_legal_notice_date }}</td>
+        </tr>
+        <tr>
+            <td>For Legal Status</td>
+            <td>{{ form.for_legal_status }}</td>
+        </tr>
+        <tr>
+            <td>For Legal Comment</td>
+            <td>{{ form.for_legal_comment }}</td>
+        </tr>
+        <tr>
+            <td>Final Status</td>
+            <td>{{ form.final_status }}</td>
+        </tr>
+        <tr>
+            <td>Second Notice Print History</td>
+            <td>{{ form.second_notice_print_history }}</td>
+        </tr>
+        <tr>
+            <td>Second Notice Print Date</td>
+            <td>{{ form.second_notice_print_date }}</td>
+        </tr>
+        <tr>
+            <td>Third Notice Print History</td>
+            <td>{{ form.third_notice_print_history }}</td>
+        </tr>
+        <tr>
+            <td>Third Notice Print Date</td>
+            <td>{{ form.third_notice_print_date }}</td>
+        </tr>
+        <tr>
+            <td>For Legal Notice Print History</td>
+            <td>{{ form.for_legal_notice_print_history }}</td>
+        </tr>
+        <tr>
+            <td>For Legal Notice Print Date</td>
+            <td>{{ form.for_legal_notice_print_date }}</td>
+        </tr>
+        <tr>
+            <td>Date Complied</td>
+            <td>{{ form.date_complied }}</td>
+        </tr>
+        <tr>
+            <td>Date Final Status</td>
+            <td>{{ form.date_final_status }}</td>
+        </tr>
+    </tbody>
+</table>
+</form>
+</body>
+
+<!-- </div> -->
+{% endblock %}

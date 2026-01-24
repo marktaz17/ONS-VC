@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- <h1>Add Record</h1> -->
+ <style>
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 98%;
+    }
+ </style>
+    <form method="POST" action="{% url 'add_holiday' %}" enctype="multipart/form-data">
+        {% csrf_token %} <!-- for security purpose  -->
+        <br>
+        
+        <div class="row">
+
+
+            <div class="col-2" style="margin-bottom: 15px;"><strong>Holiday </strong><span style="color: red;">*</span></label>{{ form.holiday }}</div>
+
+
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success " style="float: left;">Save</button>
+        
+    </form>
+    
+{% endblock %}

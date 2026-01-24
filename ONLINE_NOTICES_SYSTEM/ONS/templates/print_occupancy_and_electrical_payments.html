@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Report</title>
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 9px;
+        }
+
+        @media print {
+            @page {
+
+                @bottom-left {
+                    content: 'Page ' counter(page) ' of ' counter(pages);
+                    margin-top: -5mm;
+                }
+            }
+            body {
+                margin: 0; /* Remove body margins */
+                padding: 0; /* Remove body padding */
+            }
+
+            .header-wrapper {
+                margin: 0; /* Ensure no margin around the header */
+                padding: 0; /* Remove padding */
+            }
+
+            .image-wrapper {
+                margin: 0; /* Ensure no margin around the image */
+                padding: 0; /* Remove padding */
+            }
+
+            /* Page break after each table */
+            .page-break {
+                page-break-after: always; /* Forces a page break after each element with this class */
+            }
+        }
+        .container {
+            width: 8.5in;  /* Width of 8.5 inches */
+            height: 13in; /* Allow height to adjust */
+            /* border: 1px solid #bababa;   */
+            box-sizing: border-box;
+            padding: 15px;
+            margin: auto;  /* Center the container */
+        }
+        .small-image {
+            width: 780px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+            text-align: center;
+        }
+        .image-wrapper {
+            text-align: center; /* Center the image horizontally */
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px dotted #868585;
+        }
+        th, td {
+            border: 1px dotted #868585;
+            padding: 5px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .mini-container {
+            width: 250px;
+            height: auto;
+            float: right; /* Float the container to the right */
+        }
+
+    </style>
+     <script>
+        // Automatically open the print dialog when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            window.print();
+        });
+
+        // Close the window after printing or canceling
+        window.onafterprint = function() {
+            window.close();
+        };
+    </script>
+</head>
+<body>
+    <div class="container"> 
+        <div class="image-wrapper">
+            <img src="{% static 'ONS/report.png' %}" alt="CEO Image" class="small-image">
+        </div>
+        <h1 style="font-size: 15px;color: #868585;">OCCUPANCY AND ELECTRICAL PAYMENTS REPORT</h1>
+        <h1 style="font-size: 12px;color: #868585;">Selected Barangay: {{ selected_brgy_in_occu_elec }} | Year: {{ select_year }}</h1>
+
+        <hr style="border: 1px dotted #868585;"/>
+        <h1 style="float: left;color: #868585;">Total Records: {{ report_counter_data }}</h1>
+        <h1 style="float: right;color: #868585;">Report Generated: {{ today }}</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th> <!-- Row Number Header -->
+                    <th>Pin</th>
+                    <th>Building Owner</th>
+                    <th>Brgy</th>
+                    <th>Status</th>
+                    <th>Date Complied</th>
+                    <th>Occupancy</th>
+                    <th>Electrical</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in output_data %}
+                <tr>
+                    <td style="text-align: center;">{{ forloop.counter }}</td> <!-- Row Number -->
+                    <td style="text-align: center;">{{ record.pin_number }}</td>
+                    <td>{{ record.building_owner }}</td>
+                    <td style="text-align: center;">{{ record.brgy_pin }}</td>
+                    <td style="text-align: center;">{{ record.final_status }}</td>
+                    <td style="text-align: center;">{{ record.date_complied }}</td>
+                    <td style="text-align: center;">{{ record.occupancy_permit }}</td>
+                    <td style="text-align: center;">{{ record.electrical_permit }}</td>
+                </tr>
+
+                <!-- Check for page break condition -->
+                {% if forloop.counter|divisibleby:30 and not forloop.last %}
+                </tbody>
+                </table>
+                <div class="page-break"></div> <!-- Page break after every 20 records -->
+                <div class="image-wrapper">
+                    <img src="{% static 'ONS/report.png' %}" alt="CEO Image" class="small-image">
+                </div>
+                <h1 style="font-size: 15px;color: #868585;">DAILY ENCODED DATA REPORT</h1>
+                <h1 style="font-size: 12px;color: #868585;">Selected Barangay: {{ selected_brgy_in_occu_elec }}</h1>
+                <h1 style="font-size: 12px;color: #868585;"></h1>
+
+                <hr style="border: 1px dotted #868585;"/>
+                <h1 style="float: left;color: #868585;">Total Records: {{ report_counter_data }}</h1>
+                <h1 style="float: right;color: #868585;">Report Generated: {{ today }}</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th> <!-- Row Number Header -->
+                            <th>Pin</th>
+                            <th>Building Owner</th>
+                            <th>Brgy</th>
+                            <th>Status</th>
+                            <th>Date Complied</th>
+                            <th>Occupancy</th>
+                            <th>Electrical</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="mini-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ITEM</th> <!-- Row Number Header -->
+                            <th>OCCUPANCY</th>
+                            <th>ELECTRICAL</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center;">SUBTOTAL</td> <!-- Row Number -->
+                            <td style="text-align: center;font-size: 10px;">{{ total_occupancy_payment }}
+                            </td>
+                            <td style="text-align: center;font-size: 10px;"> {{ total_electricl_payment }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">GRAND TOTAL</td> <!-- Row Number -->
+                            <td style="text-align: center; font-size: 13px;" colspan="2">{{ grand_total_occu_elec }}</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

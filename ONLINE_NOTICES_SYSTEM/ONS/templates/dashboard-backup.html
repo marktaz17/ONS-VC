@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  
+    .container {
+        width: 90%;
+        height: 100%;
+        max-width: 2000px; /* Set a maximum width for larger screens */
+        margin: 0 auto; /* Center the container */
+        padding: 0; /* Default padding */
+    }
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 8px;
+    }
+        
+    .div1 {
+        grid-column: span 9 / span 9;
+    }
+
+    .div2 {
+        grid-column: span 6 / span 6;
+        grid-row: span 4 / span 4;
+        grid-row-start: 2;
+    }
+
+    .div3 {
+        grid-column: span 3 / span 3;
+        grid-row: span 4 / span 4;
+        grid-column-start: 7;
+        grid-row-start: 2;
+    }
+        
+    .row {
+        
+        border-radius: 5px; 
+        border: 1px solid #d6d6d6; /* Optional: Add border around the row */
+        text-align: left; 
+        
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+    }
+   
+    .col-3 {
+        flex: 1; /* Allow each column to take equal space */
+        padding: 10px; /* Optional: add padding for better spacing */
+    }
+    
+
+    /* CHART */
+
+    .chart-container {
+        height: 480px;
+        align-items: justify; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+        display: flex;
+    }
+   /* TABLE */
+    
+   .table-wrapper {
+            max-height: 480px; /* Set a maximum height for scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+            /* border: 1px solid #ccc; Optional: Add border around the table */
+            border-radius: 5px; /* Optional: Add rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center; /* Center text in the table */
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 11px;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky; /* Make header sticky */
+            top: 0; /* Stick to the top of the table wrapper */
+            z-index: 1; /* Ensure header is above body */
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<h4 style="margin-bottom: -10px;">DASHBOARD</h4>
+    
+<div class="parent">
+    
+    <div class="div1" style="margin-top: 25px;">
+        <div class="row">
+            <div class="col-3">
+                <span style="font-size: 12px;">Complied</span>
+                <div style="font-size: 30px; font-weight: bold; color: #0b9904;">{{formatted_complied_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Noncompliant</span>
+                <div style="font-size: 30px; font-weight: bold; color: #FF4C4C;">{{formatted_noncompliant_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Reassessment</span>
+                <div style="font-size: 30px; font-weight: bold; color: #4C9FFF;">{{formatted_reassessment_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Processing</span>
+                <div style="font-size: 30px; font-weight: bold; color: #FF9F4C;">{{formatted_processing_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Lot Owner Consent</span>
+                <div style="font-size: 30px; font-weight: bold; color: #FFEA4C;">{{formatted_lot_owner_consent_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">No Tagging</span>
+                <div style="font-size: 30px; font-weight: bold; color: #A0A0A0;">{{formatted_no_entry_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Data Entry</span>
+                <div style="font-size: 30px; font-weight: bold; color: #A04CFF;">{{formatted_total_count}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Building Permit Amount</span>
+                <div style="font-size: 25px; font-weight: bold; color: #cd8538;">₱{{total_of_building_permit}}</div>
+            </div>
+            <div class="col-3">
+                <span style="font-size: 12px;">Electrical Permit Amount</span>
+                <div style="font-size: 25px; font-weight: bold; color: #cd8538;">₱{{total_of_electrical_permit}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="div2">
+        <div class="row">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Barangay</th>
+                            <th>Complied</th>
+                            <th>Noncompliant</th>
+                            <th>Reassessment</th>
+                            <th>Processing</th>
+                            <th>Lot Owner Consent</th>
+                            <th>No Tagging</th>
+                            <th>Building Permit</th>
+                            <th>Electrical Permit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for brgy_counts in results %}
+                            <tr>
+                                <td>{{ brgy_counts.barangay }}</td>
+                                <td>{{ brgy_counts.Complied }}%</td>
+                                <td>{{ brgy_counts.Noncompliant }}%</td>
+                                <td>{{ brgy_counts.Reassessment }}%</td>
+                                <td>{{ brgy_counts.Processing }}%</td>
+                                <td>{{ brgy_counts.LotOwnerConsent }}%</td>
+                                <td>{{ brgy_counts.NoTagging }}%</td>
+                                <td>₱ {{ brgy_counts.total_occupancy_permits }}</td>
+                                <td>₱ {{ brgy_counts.total_electrical_permits }}</td>
+                            </tr>
+                        {% endfor %}
+                         
+                        
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="div3">
+        <div class="row">
+        <div class="chart-container">
+            
+                <canvas id="polarAreaChart"></canvas>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+<script>
+    async function fetchData() {
+        try {
+            const response = await fetch('/dashboard/data/');  // Update with your URL
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+
+            const ctx = document.getElementById('polarAreaChart').getContext('2d');
+            const polarAreaChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: [
+                        'Complied: ' + data.complied + '%',
+                        'Noncompliant: ' + data.noncompliant + '%',
+                        'Reassessment: ' + data.reassessment + '%',
+                        'Processing: ' + data.processing + '%',
+                        'Lot Owner Consent: ' + data.lot_owner_consent + '%',
+                        'No Tagging: ' + data.no_entry + '%' 
+                    ],
+                    datasets: [{
+                        label: 'Percentage',
+                        data: [
+                            data.complied,
+                            data.noncompliant,
+                            data.reassessment,
+                            data.processing,
+                            data.lot_owner_consent,
+                            data.no_entry
+                        ],
+                        backgroundColor: [
+                            'rgba(11, 153, 4, 0.6)',    // Green
+                            'rgba(255, 76, 76, 0.6)',    // Red
+                            'rgba(76, 158, 255, 0.6)',   // Blue
+                            'rgba(255, 159, 76, 0.6)',    // Orange
+                            'rgba(255, 234, 76, 0.6)',   // Yellow
+                            'rgba(160, 160, 160, 0.6)',  // Gray
+                        ],
+                        borderColor: [
+                            'rgba(11, 153, 4, 1)',       // Green
+                            'rgba(255, 76, 76, 1)',      // Red
+                            'rgba(76, 158, 255, 1)',     // Blue
+                            'rgba(255, 159, 76, 1)',     // Orange
+                            'rgba(255, 234, 76, 1)',     // Yellow
+                            'rgba(160, 160, 160, 1)',    // Gray
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    fetchData();
+</script>
+{% endblock %}

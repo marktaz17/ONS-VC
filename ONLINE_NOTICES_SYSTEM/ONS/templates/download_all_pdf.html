@@ -1,0 +1,475 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0; /* Remove default margin */
+                padding: 0; /* Remove default padding */
+                align-items: center;
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+            }
+
+            .breakpage {
+                
+                page-break-after: always;  /* Page break after this element */
+                page-break-inside: avoid;  /* Avoid breaking inside this element */
+                margin: 0 auto;           /* Center the element horizontally */
+                display: block;           /* Ensure it's a block element */
+              
+                
+            }
+            /* TABLE 1 and 2 */
+             
+            .container {
+                width: 100%; /* Full width */
+                padding: 0px;  /* Optional: Add padding */
+                box-sizing: border-box;
+                font-size: 21px;
+                margin:  auto;  /* Center the container */
+                padding: 0px;
+                
+            }
+            .table td {
+                padding: 5px;
+            }
+            .table th {
+                padding: 5px;
+            }
+            /*  */
+           /* NOTICE 2ND AND 3RD */
+           .signatory-container {
+                /* border:1px solid #bababa; */
+                width: 2.7in;
+                height: 1.1in;
+                margin-left: 553px;
+                text-align: center;
+            }
+            .small-image {
+                width: 900px; /* Adjust size as needed */
+                height: auto; /* Maintain aspect ratio */
+            }
+            .image-wrapper {
+                text-align: center; /* Center the image horizontally */
+            }
+            .indented {
+                margin-left: 80px; 
+                /* text-indent: 5px; */
+                margin-right: 80px;
+            }
+            .small-font {
+                font-size: 16px; /* Adjust this value as needed */
+                margin-bottom: -10px; /* Adjust margin as needed */
+            }
+            .name-container {
+                text-align: left;
+                /* border:1px solid #bababa; */
+                width: 6in;
+                /* margin-left: 5px; */
+                text-align: center;
+            }
+            .justified {
+                text-align: justify; /* Justify text for specific paragraphs */
+                margin-left: 20px; /* Left margin for indented paragraphs */
+                text-indent: 5px;
+                font-weight: bold;
+            }
+            .centered-text {
+            text-align: center; /* Center the content */
+            }
+
+            .centered-text p {
+                display: inline-block; /* Keep paragraphs inline for proper spacing */
+                margin: 0; /* Remove default margin */
+            }
+            /*  */
+
+            /* FOR LEGAL */
+            .content {
+                position: relative; /* Ensure text is positioned normally */
+                z-index: 2; /* Text above the image */
+                margin-top: -1500px;
+                
+                font-size: 20px; /* Text size */
+            }
+            .legal-img {
+                width: 1050px; /* Adjust size as needed */
+                height: auto; /* Maintain aspect ratio */
+                
+            }
+            .legal-img-footer {
+                position: relative; /* Position the image absolutely */
+                bottom: -6.5in; /* Align to the bottom */ 
+                width: 1050px; /* Adjust size as needed */
+                height: auto; /* Maintain aspect ratio */
+                z-index: 1; /* Ensure it's below the text */
+
+            }
+            .legal-container {
+                width: 100%; /* Full width */
+                padding: 0px;  /* Optional: Add padding */
+                box-sizing: border-box;
+                margin: 0 auto;  /* Center the container */
+                padding: 0px;
+               
+            }
+            .legal-container-footer {
+                width: 100%; /* Full width */
+                padding: 0px;  /* Optional: Add padding */
+                box-sizing: border-box;
+                margin: 0 auto;  /* Center the container */
+                padding: 0px;
+                position: relative;
+                margin-bottom: 125px;
+            }
+            
+        </style>
+       
+    </head>
+    <body>
+        <!-- FOR 2ND AND 3RD NOTICE -->
+        {% if notice_counter != 0 %}
+            <div class="breakpage">
+                <div class="container">
+                    <br>
+                    <br>
+                    <table class="table" style="align-items: center; margin-left: auto; margin-right: auto; border-collapse: collapse; border: 2px solid black;">
+                        <caption style="font-weight: 700; text-transform: uppercase; text-align: left;">{{ today }}</caption>
+                    
+                        <thead style="text-align: center;">
+                            <tr style="text-align: center;">
+                                <th scope="col" style="border: 1px solid black;">NO.</th>
+                                <th scope="col" style="border: 1px solid black;">PIN</th>
+                                <th scope="col" style="border: 1px solid black;" class="building-owner">BUILDING OWNER NAME</th>
+                                <th scope="col" style="border: 1px solid black;">BRGY</th>
+                                <th scope="col" style="width: 15%; border: 1px solid black;">NOTICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for table in notice_records %}
+                                <tr>
+                                    <th scope="row" style="border: 1px solid black;">{{ forloop.counter }}</th>
+                                    <td style="border: 1px solid black;">{{ table.pin_number }}</td>
+                                    <td style="border: 1px solid black;">{{ table.building_owner }}</td>
+                                    <td style="border: 1px solid black; text-align: center;">{{ table.brgy_pin }}</td>
+                                    <td style="border: 1px solid black; text-align: center;">
+                                        {% if table.second_status == "NONCOMPLIANT" and table.second_notice_date == today %}
+                                            2ND NOTICE
+                                        {% elif table.third_status == "NONCOMPLIANT" and table.third_notice_date == today %}
+                                            3RD NOTICE
+                                        {% else %}
+                                            <!-- Optionally handle cases where there's no notice -->
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>           
+            </div>
+            {% for record in notice_records %}
+                {% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today or record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %}
+                    <div class="breakpage">
+                        
+                        <p class="small-font pin-container" style="text-align: left; opacity: 0.1; margin-left: 15px;">
+                            {{ record.pin_number }}
+                        </p>  
+                        <div class="image-wrapper" style="margin-bottom: -30px; margin-top: 25px;">
+                            <img src="{% static 'ONS/CEO LOGO1.png' %}" alt="CEO Image" class="small-image" />
+                        </div>
+                        <body>
+                            <h3 style="text-align: center;">NOTICE OF VIOLATION</h3>
+                            <div class="centered-text">
+                                <p><input type="checkbox" /> First</p>
+                                <p>
+                                    <input type="checkbox" 
+                                        {% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today %} 
+                                        checked 
+                                        {% endif %} /> 
+                                    Second
+                                </p>
+                                <p>
+                                    <input type="checkbox" 
+                                        {% if record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %} 
+                                        checked 
+                                        {% endif %} /> 
+                                    Third & Last
+                                </p>
+                            </div>
+                            <p style="text-align: center; margin-bottom: -33px;">
+                            {% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today %}
+                                {{ record.second_notice_date }}
+                            {% elif record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %}
+                                {{ record.third_notice_date }}
+                            {% else %}
+                            {% endif %}</p>
+                            <div class="indented">
+                                <p style="text-align: center; margin-bottom: -15px;">__________________________________</p>
+                                <p style="text-align: center; margin-bottom: 34px;">DATE</p>
+                                <div></div>
+                                <div class="name-container">
+                                    <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                                        {{ record.building_owner }}
+                                    </p>
+                                    <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                                        {{ record.address }}
+                                    </p>
+                                    <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                                        BARANGAY {{ record.brgy_pin }}
+                                    </p>
+                                </div>
+                                <br>
+                                <p class="small-font" >Sir/Madam:
+                                </p>
+                                
+                                <p class="small-font" style="text-align: justify; text-indent: 45px;">
+                                    <span>Please be informed that an inspection conducted by this Office on</span>
+                                    <span style="text-decoration: underline;">
+                                        {% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today %}
+                                            {{ record.second_notice_date }}
+                                        {% elif record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %}
+                                            {{ record.third_notice_date }}
+                                        {% else %}
+                                        {% endif %}
+                                    </span>
+                                    <span style="margin-left: 15px;"> of your building/structure/construction and premises located at </span>
+                                    <span style="text-decoration: underline;">
+                                        {% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today %}
+                                        <span style="text-decoration: underline; margin-left: 5px; margin-right: 7px;">{{ record.address }}, </span><span style="text-decoration: underline;">BARANGAY {{ record.brgy_pin }}</span>
+                                        {% elif record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %}
+                                        <span style="text-decoration: underline; margin-left: 5px; margin-right: 7px;">{{ record.address }}, </span><span style="text-decoration: underline;">BARANGAY {{ record.brgy_pin }}</span>
+                                        {% else %}
+                                        {% endif %}
+                                    </span>
+                                    <span style="margin-left: 15px;"> reveals the following violation/s of the National Building Code (P.D. 1096) and its Implementing Rules and Regulations:</span>
+                                </p>
+                                
+                                <h4 class="small-font">
+                                    SECTION 301 - BUILDING PERMIT
+                                </h4>
+                                <p class="small-font justified">
+                                    &#x274F No person, firm or corporation, including any agency or instrumentality of the government shall erect, 
+                                    construct, alter, repair, move, convert or demolish any building/structure or cause the same to be done without 
+                                    first obtaining a building permit therefore from the City Engineer's Office assigned in the place where the 
+                                    subject building/structure is located or the building work is to be done.
+                                </p>
+                                
+                                <h4 class="small-font">
+                                    SECTION 309 - BUILDING PERMIT
+                                </h4>
+                                <p class="small-font justified">
+                                    &#x274F Failure to post or display the Certificate of Occupancy at a conspicuous place on the premises of the building.
+                                </p>
+                                
+                                <h4 class="small-font">
+                                    RULE II - ADMINISTRATIVE SANCTIONS
+                                </h4>
+                                <p class="small-font justified">
+                                    &#x274F Non-compliance with work stoppage order for alteration/ addition/ conversion/ repair without permit.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Use or occupancy without Certificate of Occupancy.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Change in existing use or occupancy without Certificate of Change of Occupancy.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Unauthorized changes during construction.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Unauthorized change in type of construction from more fire-resistive to less fire-resistive.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Non-compliance with order to abate or demolish.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F Non-compliance with work stoppage order for construction without permit.
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F ___________________________________________________________________________________________________________________
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F ___________________________________________________________________________________________________________________
+                                </p>
+                                <p class="small-font justified">
+                                    &#x274F ___________________________________________________________________________________________________________________
+                                </p>
+                                
+                                <p class="small-font" style="text-align: justify; text-indent: 40px;">
+                                    You or your representative may contact this Office within three (3) days from receipt hereof. 
+                                    Failure to do so shall cause this office to institute appropriate action against you.
+                                </p>
+                                <br>
+                                <p class="small-font" style="text-indent: 40px;">
+                                    Your cooperation on this matter is highly appreciated.
+                                </p>
+                                <br>
+                                <div class="signatory-container">
+                                    <p class="small-font">
+                                        Very truly yours,
+                                    </p>
+                                    <div class="image-wrapper-sig" style="margin-bottom: -65px;">
+                                        <img src="{% static 'ONS/e-sig v1.png' %}" alt="E-Sig Image" class="small-image-sig" />
+                                    </div>
+                                    <p class="small-font">
+                                        {% for signatory in signatory %}
+                                        {{ signatory.signatory }}
+                                        
+                                    {% endfor %}
+                                    </p>
+                                    <p class="small-font">
+                                        {% for signatory in signatory %}
+                                        {{ signatory.position }}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                <div class="serveby">
+                                    <p class="small-font">
+                                        <span>Served by</span>
+                                        <span style="margin-left: 16px;">: CEO</span>
+                                    </p>
+                                    <p class="small-font">
+                                        <span>Date</span>
+                                        <span style="margin-left: 53px;">:{% if record.second_status == "NONCOMPLIANT" and record.second_notice_date == today %}
+                                                {{ record.second_notice_date }}
+                                            {% elif record.third_status == "NONCOMPLIANT" and record.third_notice_date == today %}
+                                                {{ record.third_notice_date }}
+                                            {% else %}
+                                            {% endif %}
+                                        </span>
+                                    </p>
+                                    <p class="small-font">
+                                        <span>Received by</span>
+                                        <span style="margin-left: 2px;">	: ____________________________________</span>
+                                    <p class="small-font">
+                                        <span>Date</span>
+                                        <span style="margin-left: 53px;">	: ____________________________________</span>
+                                    </p>
+                                    <br>
+                                    <br>
+                                    <p class="small-font" style="text-align: center;">
+                                        (PLEASE SEE OTHER SIDE)
+                                    </p>
+                                    
+                                </div>
+                            </div>
+                        </body>
+                    </div>
+                {% endif %}
+            {% endfor %}        
+        {% endif %}
+        <!-- FOR LEGAL NOTICE -->
+        {% if notice_legal_counter != 0 %}
+            <div class="breakpage">
+                <div class="container">
+                    <br>
+                    <br>
+                    <table class="table" style="align-items: center; margin-left: auto; margin-right: auto; border-collapse: collapse; border: 2px solid black;">
+                        <caption style="font-weight: 700; text-transform: uppercase; text-align: left;">{{ today }}</caption>
+                    
+                        <thead style="text-align: center;">
+                            <tr style="text-align: center;">
+                                <th scope="col" style="border: 1px solid black;">NO.</th>
+                                <th scope="col" style="border: 1px solid black;">PIN</th>
+                                <th scope="col" style="border: 1px solid black;" class="building-owner">BUILDING OWNER NAME</th>
+                                <th scope="col" style="border: 1px solid black;">BRGY</th>
+                                <th scope="col" style="width: 15%; border: 1px solid black;">NOTICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for table in notice_legal_records %}
+                                <tr>
+                                    <th scope="row" style="border: 1px solid black;">{{ forloop.counter }}</th>
+                                    <td style="border: 1px solid black;">{{ table.pin_number }}</td>
+                                    <td style="border: 1px solid black;">{{ table.building_owner }}</td>
+                                    <td style="border: 1px solid black; text-align: center;">{{ table.brgy_pin }}</td>
+                                    <td style="border: 1px solid black; text-align: center;">
+                                        {% if table.for_legal_status == "NONCOMPLIANT" and table.for_legal_notice_date == today %}
+                                            FOR LEGAL                       
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% for record in notice_legal_records %}
+                {% if record.for_legal_status == "NONCOMPLIANT" and record.for_legal_notice_date == today %}
+                    <div class="breakpage">
+                        <div class="image-wrapper legal-container">                         
+                            <div class="image-wrapper legal-container" style="margin-bottom: -30px;">
+                                <img src="{% static 'ONS/header & footer1.png' %}" alt="CEO Image" class="legal-img"/>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <body>
+                                <br>
+                                <p class="small-font pin-container" style="text-align: left; opacity: 0.2; margin-left: 15px;">
+                                    {{ record.pin_number }}
+                                </p>
+                                <div style="padding: 60px; text-align: right;">
+                                    {{ record.for_legal_notice_date }}
+                                </div>
+                                <div style="padding: 60px; margin-top: -70px;">
+                                    <p>
+                                    Subject: <strong>Endorsement for Legal Action Regarding Executive Order no. 26</strong>
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -80px;">
+                                    <p>
+                                    Dear <strong>Atty. Dennis,</strong>
+                                    </p>
+                                </div>
+                                <div style="margin-top: -70px; text-align: justify; margin-left: 60px; margin-right: 60px;">
+                                    <p>
+                                        <span style="margin-right: 20px;">This letter serves to endorse the case of {{ record.building_owner }} residing at {{ record.address }},</span> <span style="margin-right: 5px;">BARANGAY</span> <span style="margin-right: 5px;">{{ record.brgy_pin }}</span>
+                                        for legal action due to persistent non-compliance with building permit regulations and repeated violation notices. 
+                                        Third and last violation notice was served on {{ record.third_notice_date }}.
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -100px; text-align: justify;">
+                                    <p>
+                                        Therefore, we request that your office initiate legal proceedings to address this ongoing violation.
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                                    <p>
+                                        Copies of the violation notices are attached.
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                                    <p>
+                                        Sincerely,
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -80px; text-align: justify;">
+                                    <p>
+                                            <strong> Engr.
+                                                {% for signatory in signatory %}
+                                                    {{ signatory.signatory }}
+                                                {% endfor %}
+                                            </strong>
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -150px; text-align: justify;">
+                                    <p>
+                                        {% for signatory in signatory %}
+                                            {{ signatory.position }}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                <div style="padding: 60px; margin-top: -150px; text-align: justify;">
+                                    <p>
+                                        City Government of Cavite
+                                    </p>
+                                </div>
+                                
+                            </body>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>

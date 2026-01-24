@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Notice</title>
+    <style>
+         @media print {
+            @page {
+                margin: 0; /* Remove margins for the entire page */
+            }
+            
+            body {
+                margin: 0; /* Remove body margins */
+                padding: 0; /* Remove body padding */
+            }
+
+            .header-wrapper {
+                margin: 0; /* Ensure no margin around the header */
+                padding: 0; /* Remove padding */
+            }
+
+            .image-wrapper {
+                margin: 0; /* Ensure no margin around the image */
+                padding: 0; /* Remove padding */
+            }
+        }
+        .container {
+            width: 8.5in;  /* Width of 8.5 inches */
+            height: 13in;  /* Height of 13 inches */
+            border: 1px solid #bababa;  
+           
+            box-sizing: border-box;
+            
+            margin: 0 auto;  /* Center the container */
+        }
+        .small-font {
+            font-size: 12px; /* Adjust this value as needed */
+            margin-bottom: -10px; /* Adjust margin as needed */
+        }
+       
+        .indented {
+            margin-left: 50px; /* Left margin for indented paragraphs */
+            /* text-indent: 5px; */
+            margin-right: 50px;
+        }
+        .indented-paragraph {
+            margin-left: 20px; /* Left margin for indented paragraphs */
+            /* text-indent: 5px; */
+            margin-right: 20px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        .font-weight {
+            font-weight: bold;
+        }
+        .justified {
+            text-align: justify; /* Justify text for specific paragraphs */
+            margin-left: 20px; /* Left margin for indented paragraphs */
+            text-indent: 5px;
+        }
+    </style>
+     <script>
+        // Automatically open the print dialog when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            window.print();
+        });
+    
+        // Close the window after printing or canceling
+        window.onafterprint = function() {
+            window.close();
+        };
+    </script>
+<div class="container">
+    <h4 class="indented">SECTION 212. ADMINISTRATIVE FINES</h4>
+
+    <p class="indented font-weight">1. <span style="text-decoration: underline;">Imposition of Administrative Fines:</span></p>
+   
+    <div class="indented small-font">
+        <p class="justified" style="margin-bottom: 20px; text-indent: -20px; padding-left: 20px;">A. <span>The Secretary or his duly authorized representative may prescribe and impose fines not exceeding ten thousand pesos (10,000) 
+            in the following cases, subject to the terms and procedures as hereunder provided:</span></p>
+            <div class="indented-paragraph small-font">
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    i.  <span>Erecting, constructing, altering, repairing, moving, converting, 
+                    installing or demolishing a private or public building/structure if without building/demolition permit.</span>
+                </p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    ii. <span>Making any alteration, addition, conversion or repair in any building or structure or appurtenances thereto, 
+                    constructed or installed before the adoption of the Code, whether public or private, without a permit.</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    iii. <span>Unauthorized change, modification or alteration during the construction in the duly submitted plans 
+                    and specification on which the building permit is based.</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    iv. <span>Non-compliance with the work stoppage order or notice and/or orders to effect necessary 
+                    correction in plans and specification found defective.</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    v. <span>Non-compliance with order to demolish building/structure declared to be nuisance,
+                    ruinous or dangerous</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    vi. <span>Use or occupancy of a building/structure without Certificate of Occupancy/Use 
+                    even if constructed under a valid building permit.</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    vii. <span>Change in the existing use or occupancy classification of a building/structure 
+                    or portion thereof without the corresponding certificate of Change of use.</span></p>
+                <p class="justified" style="text-indent: -20px; padding-left: 20px;">
+                    viii. <span>Failure to post or display the certificate of occupancy/use/operation in a 
+                    conspicuous place on the premises of the building/structure/appurtenances.</span></p>
+                <p class="justified" style="margin-bottom: 20px; text-indent: -20px; padding-left: 20px;">ix. <span>Change in the type of construction of any building/structure 
+                    without an amendatory permit.</span></p>
+            </div>
+        <p class="justified" style="margin-bottom: 20px; text-indent: -20px; padding-left: 20px;">B. <span>in addition to the imposed penalty, the owner shall correct/remove 
+            his violations of the provision of the code</span></p>
+    </div>
+    <p class="indented font-weight">2. <span style="text-decoration: underline;">Determination of Amount of Fines:</span></p>
+        <div class="indented small-font">
+            <p class="justified" style="margin-bottom: 20px; text-indent: -20px; padding-left: 20px;">A. <span>In the determination of the amount of fines to be imposed, 
+                violations shall be classified as follow:</span></p>
+                <div class="indented-paragraph">
+                    <p class="justified">i. <span>Light Violations</span></p>
+                        <div class="indented-paragraph">
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">a. <span>Failure to post Certificate of Occupancy/Use/Operation.</span></p>
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">b. <span>Failure to post Building Permit construction information sign.</span></p> 
+                            <p class="justified" style="text-indent: -20px; padding-left: 20px;">c. <span>Failure to provide or install appropriate safety measure for the protection 
+                                of worker, inspector, visitors, immediate neighbor, and pedestrians.</span></p> 
+                        </div>
+                    <p class="justified">ii. <span>Less Grave Violations</span></p>
+                        <div class="indented-paragraph">
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">a. <span>Non-compliance with the work stoppage order for 
+                                the alteration/addition/conversation/repair without permit</span></p>
+                            <p class="justified" style="text-indent: -20px; padding-left: 20px;">b. <span>Use or occupancy of building/structure without 
+                                appropriate Certificate of Occupancy/Use/Operation.</span></p>  
+                        </div>
+                    <p class="justified">iii. <span>Grave Violation</span></p>
+                        <div class="indented-paragraph">
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">a. <span>Unauthorized change, modification or alteration during construction in 
+                                the duly submitted plans and specification on which the building permit is based.</span></p>
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">b. <span>Unauthorized change in type of construction 
+                                from more fire-resistive to less fire-resistive.</span></p>
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">c. <span>Non-compliance with order to abate or demolish.</span></p>  
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">d. <span>Non-compliance with work stoppage order 
+                                for construction/demolition without permit.</span></p>  
+                            <p class="justified" style="margin-bottom: -10px; text-indent: -20px; padding-left: 20px;">e. <span>Change in the existing use or occupancy without 
+                                Certificate of Change of Occupancy/Use/Operation.</span></p>
+                            <p class="justified" style="text-indent: -20px; padding-left: 20px;">f. <span>Excavation left open without any work being 
+                                done in the site for more than hundred twenty (120) days.</span></p>    
+                        </div>
+                </div>
+            <p class="justified" style="margin-bottom: 20px; text-indent: -20px; padding-left: 20px;">B. <span>Amount of Fines</span></p>
+                <div class="indented-paragraph">
+                    <p class="justified">The following amount of fines for violations of the code and this IRR is hereby prescribed:</p>
+                        <div class="indented-paragraph" style="font-weight: bold; text-align: center;">
+                            <p class="justified" style="margin-bottom: -10px; text-indent: 100px; padding-left: 20px;">Light Violations - ₱ 5,000.00</p>
+                            <p class="justified" style="margin-bottom: -10px; text-indent: 100px; padding-left: 20px;">Less Grave Violations - ₱ 8,000.00</p> 
+                            <p class="justified" style="text-indent: 100px; padding-left: 20px;">Grave Violations - ₱ 10,000.00</p>
+                        </div>
+                </div>
+        </div>
+    <p class="indented font-weight">3. <span style="text-decoration: underline;">Section 213 Penal Provisions</span></p>
+        <div class="indented small-font">
+            <p class="justified" style="margin-bottom: 20px; text-indent: 20px; padding-left: 20px;">Any person, firm or corporation who shall violate any of the provisions 
+                of the Code and/or commit any act hereby declared to be unlawful shall upon conviction, be punished by a fine of not more than twenty thousand pesos or by 
+                <span style="font-weight: bold;">IMPRISONMENT OF NOT MORE THAN TWO YEARS</span> or by both such fine and imprisonment; Provided, that in the case of a corporation firm, partnership or association, 
+                the penalty shall be imposed upon its officials responsible for such violation and in case the guilty party 
+                is an alien, he shall immediately be deported after payment of the fine and/or service of his sentence.</p>
+        </div>
+</div>

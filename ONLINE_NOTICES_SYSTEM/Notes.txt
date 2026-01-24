@@ -1,0 +1,9 @@
+delete/uncomment line of codes in
+
+pending_notice.html
+print_pending_notice.html
+
+context_processors.py
+
+in views.py
+def pending_notice(request):

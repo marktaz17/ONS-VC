@@ -1,0 +1,390 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Notice</title>
+    <style>
+         @media print {
+            @page {
+                margin: 0; /* Remove margins for the entire page */
+            }
+            
+            body {
+                margin: 0; /* Remove body margins */
+                padding: 0; /* Remove body padding */
+            }
+
+            .header-wrapper {
+                margin: 0; /* Ensure no margin around the header */
+                padding: 0; /* Remove padding */
+            }
+
+            .image-wrapper {
+                margin: 0; /* Ensure no margin around the image */
+                padding: 0; /* Remove padding */
+            }
+        }
+        .container {
+            width: 8.5in;  /* Width of 8.5 inches */
+            height: 13in;  /* Height of 13 inches */
+            border: 1px solid #bababa;  
+           
+            box-sizing: border-box;
+            
+            margin: 0 auto;  /* Center the container */
+        }
+        .signatory-container {
+            /* border:1px solid #bababa; */
+            width: 2.7in;
+            height: 1.1in;
+            margin-left: 413px;
+            text-align: center;
+        }
+        .name-container {
+            text-align: left;
+            /* border:1px solid #bababa; */
+            width: 6in;
+            
+            /* margin-left: 5px; */
+            text-align: center;
+        }
+        .image-wrapper-header-footer {
+        z-index: 1; /* Ensures the image is behind the content */
+        }
+
+        .content {
+            margin-top: -1150px;
+            position: relative; /* Allows the content to overlap the image */
+            z-index: 2; /* Ensures the content is above the image */
+        }
+        /* Add any specific styles for printing here */
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        .serveby{
+            margin-top: -50px;
+        }
+        .image-wrapper {
+        text-align: center; /* Center the image horizontally */
+        }
+
+        .small-image {
+            width: 700px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .small-image-sig {
+            width: 150px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .centered-text {
+                text-align: center; /* Center the content */
+            }
+
+        .centered-text p {
+            display: inline-block; /* Keep paragraphs inline for proper spacing */
+            margin: 0; /* Remove default margin */
+        }
+        .small-font {
+            font-size: 13px; /* Adjust this value as needed */
+            margin-bottom: -10px; /* Adjust margin as needed */
+        }
+       
+        .justified {
+            text-align: justify; /* Justify text for specific paragraphs */
+            margin-left: 20px; /* Left margin for indented paragraphs */
+            text-indent: 5px;
+            font-weight: bold;
+        }
+        .indented {
+            margin-left: 70px; /* Left margin for indented paragraphs */
+            /* text-indent: 5px; */
+            margin-right: 70px;
+        }
+    </style>
+     <script>
+        // Automatically open the print dialog when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            window.print();
+        });
+    
+        // Close the window after printing or canceling
+        window.onafterprint = function() {
+            window.close();
+        };
+    </script>
+    
+</head>
+{% if output_data == "FIRST NOTICE" or output_data == "SECOND NOTICE" or output_data == "THIRD NOTICE" %}
+    <div class="container">
+        <p class="small-font pin-container" style="text-align: left; opacity: 0.2; margin-left: 15px;">
+            {{ record.pin_number }}
+        </p>    
+        <div class="image-wrapper" style="margin-bottom: -30px; margin-top: 25px;">
+            <img src="{% static 'ONS/CEO LOGO1.png' %}" alt="CEO Image" class="small-image" />
+        </div>
+        <body>
+            <h3 style="text-align: center;">NOTICE OF VIOLATION</h3>
+            <div class="centered-text">
+                <p><input type="checkbox" 
+                    {% if output_data == "FIRST NOTICE" %} 
+                        checked 
+                        {% endif %}/> 
+                    First
+                </p>
+                <p>
+                    <input type="checkbox" 
+                        {% if output_data == "SECOND NOTICE" %} 
+                        checked 
+                        {% endif %} /> 
+                    Second
+                </p>
+                <p>
+                    <input type="checkbox" 
+                        {% if output_data == "THIRD NOTICE" %} 
+                        checked 
+                        {% endif %} /> 
+                    Third & Last
+                </p>
+            </div>
+            <p style="text-align: center; margin-bottom: -33px;">
+            {% if output_data == "FIRST NOTICE" %}
+                {{ record.first_notice_date }}
+            {% elif output_data == "SECOND NOTICE" %}
+                {{ record.second_notice_date }}
+            {% elif output_data == "THIRD NOTICE" %}
+                {{ record.third_notice_date }}
+            {% else %}
+            {% endif %}</p>
+            <div class="indented">
+                <p style="text-align: center; margin-bottom: -15px;">__________________________________</p>
+                <p style="text-align: center; margin-bottom: 20px;">DATE</p>
+                <div class="name-container">
+                    <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                        {{ record.building_owner }}
+                    </p>
+                </div>
+                <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                    {{ record.address }}
+                </p>
+                <p class="small-font" style="margin-bottom: -15px; text-align: left; text-decoration: underline;">
+                    BARANGAY {{ record.brgy_pin }}
+                </p>
+                <br>
+                <p class="small-font" >Sir/Madam:
+                </p>
+                
+                <p class="small-font" style="text-align: justify; text-indent: 45px;">
+                    Please be informed that an inspection conducted by this Office on 
+                    <span style="text-decoration: underline;">
+                        {% if output_data == "FIRST NOTICE" %}
+                            {{ record.first_notice_date }}
+                        {% elif output_data == "SECOND NOTICE" %}
+                            {{ record.second_notice_date }}
+                        {% elif output_data == "THIRD NOTICE" %}
+                            {{ record.third_notice_date }}
+                        {% else %}
+                        {% endif %}
+                    </span>
+                    of your building/structure/construction and premises located at
+                    <span style="text-decoration: underline;">
+                        {% if record.second_status == "NONCOMPLIANT" %}
+                        {{ record.address }}, BARANGAY {{ record.brgy_pin }}
+                        {% elif record.third_status == "NONCOMPLIANT" %}
+                        {{ record.address }}, BARANGAY {{ record.brgy_pin }}
+                        {% else %}
+                        {% endif %}
+                    </span>
+                    reveals the following violation/s of the National Building Code (P.D. 1096) and its Implementing Rules and Regulations:
+                </p>
+                
+                <h4 class="small-font">
+                    SECTION 301 - BUILDING PERMIT
+                </h4>
+                <p class="small-font justified">
+                    &#x274F No person, firm or corporation, including any agency or instrumentality of the government shall erect, 
+                    construct, alter, repair, move, convert or demolish any building/structure or cause the same to be done without 
+                    first obtaining a building permit therefore from the City Engineer's Office assigned in the place where the 
+                    subject building/structure is located or the building work is to be done.
+                </p>
+                
+                <h4 class="small-font">
+                    SECTION 309 - BUILDING PERMIT
+                </h4>
+                <p class="small-font justified">
+                    &#x274F Failure to post or display the Certificate of Occupancy at a conspicuous place on the premises of the building.
+                </p>
+                
+                <h4 class="small-font">
+                    RULE II - ADMINISTRATIVE SANCTIONS
+                </h4>
+                <p class="small-font justified">
+                    &#x274F Non-compliance with work stoppage order for alteration/ addition/ conversion/ repair without permit.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Use or occupancy without Certificate of Occupancy.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Change in existing use or occupancy without Certificate of Change of Occupancy.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Unauthorized changes during construction.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Unauthorized change in type of construction from more fire-resistive to less fire-resistive.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Non-compliance with order to abate or demolish.
+                </p>
+                <p class="small-font justified">
+                    &#x274F Non-compliance with work stoppage order for construction without permit.
+                </p>
+                <p class="small-font justified">
+                    &#x274F ___________________________________________________________________________________________________________________
+                </p>
+                <p class="small-font justified">
+                    &#x274F ___________________________________________________________________________________________________________________
+                </p>
+                <p class="small-font justified">
+                    &#x274F ___________________________________________________________________________________________________________________
+                </p>
+                
+                <p class="small-font" style="text-align: justify; text-indent: 40px;">
+                    You or your representative may contact this Office within three (3) days from receipt hereof. 
+                    Failure to do so shall cause this office to institute appropriate action against you.
+                </p>
+                <br>
+                <p class="small-font" style="text-indent: 40px;">
+                    Your cooperation on this matter is highly appreciated.
+                </p>
+                <br>
+                <div class="signatory-container">
+                    <p class="small-font">
+                        Very truly yours,
+                    </p>
+                    <div class="image-wrapper-sig" style="margin-bottom: -45px;">
+                        <img src="{% static 'ONS/e-sig v1.png' %}" alt="E-Sig Image" class="small-image-sig" />
+                    </div>
+                    <p class="small-font">
+                        {% for signatory in signatory %}
+                            {{ signatory.signatory }}
+                        {% endfor %}
+                    </p>
+                    <p class="small-font">
+                        {% for signatory in signatory %}
+                            {{ signatory.position }}
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="serveby">
+                    <p class="small-font">
+                        <span>Served by</span>
+                        <span style="margin-left: 14px;">: CEO</span>
+                    </p>
+                    <p class="small-font">
+                        <span>Date</span>
+                        <span style="margin-left: 43px;">:
+                            {% if output_data == "FIRST NOTICE" %}
+                                {{ record.first_notice_date }}
+                            {% elif output_data == "SECOND NOTICE" %}
+                                {{ record.second_notice_date }}
+                            {% elif output_data == "THIRD NOTICE" %}
+                                {{ record.third_notice_date }}
+                            {% else %}
+                            {% endif %}
+                        </span>
+                    </p>
+                    <p class="small-font">
+                        <span>Received by</span>
+                        <span style="margin-left: 2px;">	: ____________________________________</span>
+                    <p class="small-font">
+                        <span>Date</span>
+                        <span style="margin-left: 43px;">	: ____________________________________</span>
+                    </p>
+                    <br>
+                    <p class="small-font" style="text-align: center;">
+                        (PLEASE SEE OTHER SIDE)
+                    </p>
+                </div>
+            </div>
+        </body>
+    </div>
+{% endif %}
+{% if output_data == "FOR LEGAL" %}
+    <div class="container">
+        <div class="image-wrapper" style="margin-bottom: -30px;">
+            <img src="{% static 'ONS/header & footer1.png' %}" alt="CEO Image" style="width: 8.4650in; height: auto; margin-right: -1px;" />
+        </div>
+        <div class="content">
+            <body>
+                <div style="padding: 60px; text-align: right;">
+                    {{ record.for_legal_notice_date }}
+                </div>
+                <div style="padding: 60px; margin-top: -70px;">
+                    <p>
+                    Subject: <strong>Endorsement for Legal Action Regarding Executive Order no. 26</strong>
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -80px;">
+                    <p>
+                    Dear <strong>Atty. Dennis,</strong>
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                    <p>
+                        This letter serves to endorse the case of {{ record.building_owner }}, residing at {{ record.address }}, Barangay {{ record.brgy_pin }} 
+                        for legal action due to persistent non-compliance with building permit regulations and repeated violation notices. 
+                        Third and last violation notice was served on {{ record.third_notice_date }}.
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                    <p>
+                        Therefore, we request that your office initiate legal proceedings to address this ongoing violation.
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                    <p>
+                        Copies of the violation notices are attached.
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -130px; text-align: justify;">
+                    <p>
+                        Sincerely,
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -80px; text-align: justify;">
+                    <p>
+                            <strong> Engr.
+                                {% for signatory in signatory %}
+                                    {{ signatory.signatory }}
+                                {% endfor %}
+                            </strong>
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -150px; text-align: justify;">
+                    <p>
+                        {% for signatory in signatory %}
+                            {{ signatory.position }}
+                        {% endfor %}
+                    </p>
+                </div>
+                <div style="padding: 60px; margin-top: -150px; text-align: justify;">
+                    <p>
+                        City Government of Cavite
+                    </p>
+                </div>
+                <p class="small-font pin-container" style="text-align: left; opacity: 0.2; margin-left: 15px; margin-top: -685px;">
+                    {{ record.pin_number }}
+                </p>
+            </body>
+        </div>
+    </div>
+{% endif %}
+
+
+
+</html>

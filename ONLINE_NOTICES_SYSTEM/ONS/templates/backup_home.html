@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
+<style>
+    * { /*FONT FOR FIELD*/
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-size: 12px;
+    }
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 98%;
+    }
+
+        .fixed-button-container {
+        position: fixed; /* Fixes the button in place */
+        top: 20px; /* Adjust as needed */
+        right: 20px; /* Adjust as needed */
+        z-index: 1000; /* Ensures it stays above other content */
+    }
+
+    .table-container {
+        margin-top: 70px; /* Adjust based on button height */
+        max-height: calc(100vh - 100px); /* Adjust as needed for your layout */
+        overflow-y: auto; /* Enable vertical scrolling */
+        position: relative; /* Required for sticky positioning */
+    }
+
+    #example {
+        width: 100%; /* Ensure the table takes full width */
+        border-collapse: collapse; /* Optional: collapse borders */
+    }
+
+    #example thead th,
+    #example tfoot th {
+        position: sticky; /* Make the header and footer sticky */
+        top: 0; /* For the header */
+        background-color: white; /* Background color for visibility */
+        z-index: 10; /* Ensure it stays above other content */
+    }
+
+    #example tfoot th {
+        bottom: 0; /* Position footer at the bottom */
+        z-index: 10; /* Ensure it stays above other content */
+    }
+
+    #example th, #example td {
+        padding: 8px; /* Add some padding */
+        text-align: left; /* Align text to the left */
+        border: 1px solid #ddd; /* Optional: border for better visibility */
+    }
+
+    
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+    }
+    tfoot {
+        display: table-header-group;
+        text-align: left;
+    }
+    td {
+        text-align: left;
+    }
+</style>
+{% if user.is_authenticated %}
+<h3>
+    DATA TABLE
+</h3>
+<br>
+<a class="btn btn-success" style="float: right;" href="{% url 'add' %}">Add</a>
+<br>
+<br>
+<table id="example" class="display table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th style="text-align: center;">Timestamp</th>
+            <th style="text-align: center;">Pin</th>
+            <!-- <th style="text-align: center;">Lot Owner</th> -->
+            <th style="text-align: center;">Building Owner</th>
+            <!-- <th style="text-align: center;">Contact No.</th> -->
+            <th style="text-align: center;">Barangay</th>
+            <!-- <th style="text-align: center;">Address</th> -->
+            <th style="text-align: center;">Status</th>
+            <th style="text-align: center;">Action</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <!-- <th></th> -->
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <!-- <th></th> -->
+            
+        </tr>
+    </tfoot>    
+    <tbody>
+    {% for records in records %}
+        <tr>
+            <td style="text-align: left; width: 12%; text-align: center;">{{ records.created_at }}</td>
+            <td style="text-align: left; width: 12%; text-align: center;">{{ records.pin_number }}</td>
+            <!-- <td style="text-align: left;">{{ records.lot_owner }}</td> -->
+            <td style="text-align: left; width: 50%;">{{ records.building_owner  }}</td>
+            <!-- <td style="text-align: left; width: 9%; text-align: center;">{{ records.contact_number }}</td> -->
+            <td style="text-align: left; width: 9%; text-align: center;">{{ records.brgy_pin }}</td>
+            <!-- <td style="text-align: left;">{{ records.address }}</td> -->
+            <td style="text-align: left; width: 7%; text-align: center;">{{ records.final_status }}</td>
+            <td style="text-align: center; width: 7%">
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">    
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'update' records.id %}">Edit</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'delete' records.id %}">Delete</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    {% endif %}
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script>
+    new DataTable('#example', {
+    initComplete: function () {
+        this.api()
+            .columns()
+            .every(function () {
+                let column = this;
+                let title = column.footer().textContent;
+    
+                // Create input element
+                let input = document.createElement('input');
+                input.placeholder = title;
+                column.footer().replaceChildren(input);
+    
+                // Event listener for user input
+                input.addEventListener('keyup', () => {
+                    if (column.search() !== this.value) {
+                        column.search(input.value).draw();
+                    }
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

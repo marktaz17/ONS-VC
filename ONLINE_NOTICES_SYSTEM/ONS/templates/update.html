@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- <div class="col-md-6 offset-md-3"> -->
+<!-- <h1>Add Record</h1> -->
+<style>
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 98%;
+    }
+    .box-shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    }
+    * { /*FONT FOR FIELD*/
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-size: 13px;
+    }
+
+</style>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} <!-- for security purpose  -->
+        <div class="box-shadow">
+        <div class="row">
+            <div style="display: none;">
+                {{ form.cavite_pin }}
+                {{ form.first_notice_print_history }}
+                {{ form.second_notice_print_history }}
+                {{ form.third_notice_print_history }}
+                {{ form.for_legal_notice_print_history }}
+
+                {{ form.first_notice_print_date }}
+                {{ form.second_notice_print_date }}
+                {{ form.third_notice_print_date }}
+                {{ form.for_legal_notice_print_date }}
+                {{form.created_by }}
+                {{ form.date_final_status }}
+
+            </div>
+
+
+
+            <div class="col-2" style="margin-bottom: 15px;"><strong>PIN</strong><span style="color: red;">*</span></label readonly>{{ form.pin_number }}</div>
+            <div class="col-6" style="margin-bottom: 15px;"></div>
+            {% if form.date_complied.value %}
+            <div class="col-2" style="margin-bottom: 15px;"><strong>Date Complied</strong><span style="color: red;"></span></label readonly>{{ form.date_complied }}</div>
+
+            {% else %}
+            <div class="col-2" style="margin-bottom: 15px;"></div>
+            {% endif %}
+            <div class="col-2" style="margin-bottom: 15px;"><strong>Overall Status</strong><span style="color: red;"></span></label readonly>{{ form.final_status }}</div>
+
+            <div class="col-5" style="margin-bottom: 15px;"></div>
+            <div class="col-3" style="margin-bottom: 15px;"></div>
+            <div class="col-3" style="margin-bottom: 15px;"></div>
+
+            <div class="col-2" style="margin-bottom: 15px;"><strong>DISTRICT </strong><span style="color: red;">*</span></label>{{ form.district_pin }}</div>
+            <div class="col-2" style="margin-bottom: 15px;"><strong>BARANGAY </strong><span style="color: red;">*</span></label>{{ form.brgy_pin }}</div>
+            <div class="col-1" style="margin-bottom: 15px;"><strong>SEC. # </strong><span style="color: red;">*</span></label>{{ form.section_pin }}</div>
+            <div class="col-1" style="margin-bottom: 15px;"><strong>LOT # </strong><span style="color: red;">*</span></label>{{ form.lot_pin }}</div>
+            <div class="col-1" style="margin-bottom: 15px;"><strong>BLDG. # </strong><span style="color: red;">*</span></label>{{ form.building_pin }}</div>
+
+            <div class="col-5" style="margin-bottom: 15px;"><strong>LOT OWNER </strong><span style="color: red;"></span></label>{{ form.lot_owner }}</div>
+            <div class="col-6" style="margin-bottom: 15px;"><strong>BUILDING OWNER </strong><span style="color: red;">*</span></label>{{ form.building_owner }}</div>
+
+            <div class="col-4" style="margin-bottom: 15px;"><strong>ADDRESS </strong><span style="color: red;">*</span></label>{{ form.address }}</div>
+            <div class="col-2" style="margin-bottom: 15px;">
+                <strong>CONTACT NUMBER</strong>
+                <span style="color: red;">
+                    {% if form.contact_number.errors %}
+                        {{ form.contact_number.errors|join:", " }}
+                    {% endif %}
+                </span>
+                {{ form.contact_number }}
+            </div>
+
+            <div class="col-2" style="margin-bottom: 15px;">
+                <strong>BUILDING PERMIT AMOUNT</strong>
+                <span style="color: red;">
+                    {% if form.occupancy_permit.errors %}
+                        {{ form.occupancy_permit.errors|join:", " }}
+                    {% endif %}
+                </span>
+                {{ form.occupancy_permit }}
+            </div>
+            <div class="col-2" style="margin-bottom: 15px;">
+                <strong>ELECTRICAL PERMIT AMOUNT</strong>
+                <span style="color: red;">
+                    {% if form.electrical_permit.errors %}
+                        {{ form.electrical_permit.errors|join:", " }}
+                    {% endif %}
+                </span>
+                {{ form.electrical_permit }}
+            </div>
+        </div>
+    </div>
+            <div class="col-6" style="margin-bottom: 15px;"></div>
+            <div class="box-shadow">
+            <div class="row">
+
+                <div class="col-2" style="margin-bottom: 15px;"><strong>1ST NOTICE DATE </strong><span style="color: red;">*</span></label>{{ form.first_notice_date }}</div>
+                <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS </strong><span style="color: red;">*</span></label>{{ form.status }}</div>
+                <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong><span style="color: red;"></span></label>{{ form.comment }}</div>
+
+                {% if form.status.value == "NONCOMPLIANT" and today >= form.second_notice_date.value %}
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>2ND NOTICE DATE</strong><span style="color: red;"></span></label>{{ form.second_notice_date }}</div>
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong><span style="color: red;"></span></label>{{ form.second_status }}</div>
+                    <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong><span style="color: red;"></span></label>{{ form.second_comment }}</div>
+                {% else %}
+                    <div style="display: none;">
+                        <div class="col-2" style="margin-bottom: 15px;"><strong>2ND NOTICE DATE</strong><span style="color: red;"></span></label>{{ form.second_notice_date }}</div>
+                        <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong><span style="color: red;"></span></label>{{ form.second_status }}</div>
+                        <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong><span style="color: red;"></span></label>{{ form.second_comment }}</div>
+                    </div>
+                {% endif %}
+
+                {% if form.second_status.value == "NONCOMPLIANT" and today >= form.third_notice_date.value %}
+                <div class="col-2" style="margin-bottom: 15px;"><strong>3RD NOTICE DATE</strong><span style="color: red;"></span></label>{{ form.third_notice_date }}</div>
+                <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong><span style="color: red;"></span></label>{{ form.third_status }}</div>
+                <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong><span style="color: red;"></span></label>{{ form.third_comment }}</div>
+                {% else %}
+                <div style="display: none;">
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>3RD NOTICE DATE</strong><span style="color: red;"></span></label>{{ form.third_notice_date }}</div>
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong><span style="color: red;"></span></label>{{ form.third_status }}</div>
+                    <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong><span style="color: red;"></span></label>{{ form.third_comment }}</div>
+                </div>
+                {% endif %}
+
+                {% if form.third_status.value == "NONCOMPLIANT" and today >= form.for_legal_notice_date.value %}
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>FOR LEGAL</strong>{{ form.for_legal_notice_date }}</div>
+                    <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong>{{ form.for_legal_status }}</div>
+                    <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong>{{ form.for_legal_comment }}</div>
+                {% else %}
+                    <div style="display: none;">
+                        <div class="col-2" style="margin-bottom: 15px;"><strong>FOR LEGAL</strong>{{ form.for_legal_notice_date }}</div>
+                        <div class="col-2" style="margin-bottom: 15px;"><strong>STATUS</strong>{{ form.for_legal_status }}</div>
+                        <div class="col-8" style="margin-bottom: 15px;"><strong>REMARKS</strong>{{ form.for_legal_comment }}</div>
+                    </div>
+                {% endif %}
+            </div>
+            </div>
+
+        <br>
+        <button type="submit" class="btn btn-success " style="float: right;">Save</button>
+    </form>
+
+<!-- </div> -->
+{% endblock %}

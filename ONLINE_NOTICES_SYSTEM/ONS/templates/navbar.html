@@ -1,0 +1,141 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    .nav-item {
+        font-size: 15px;
+    }
+
+    .nav-link {
+        position: relative; /* Needed for the pseudo-element */
+        text-decoration: none; /* Remove default underline */
+        color: inherit; /* Ensure text color inherits from parent */
+
+    }
+
+    .nav-link::after {
+        content: ''; /* Create an empty pseudo-element */
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0; /* Position it at the bottom of the link */
+        height: 2px; /* Height of the underline */
+        background-color: currentColor; /* Use the text color for the underline */
+        transform: scaleX(0); /* Start with the underline hidden */
+        transition: transform 0.3s ease; /* Smooth transition */
+    }
+
+    .nav-link:hover::after {
+        transform: scaleX(1); /* Scale the underline to full width on hover */
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">ONS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'home' %}">Table</a>
+            </li>
+            <li class="nav-item me-4">
+                <a class="nav-link position-relative" aria-current="page" href="{% url 'notice' %}">
+                    Notice
+                    {% if no_of_notice > 0 %}
+                    <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ no_of_notice }}
+                        <span class="visually-hidden">unread notices</span>
+                    </span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item me-4">
+                <a class="nav-link position-relative" aria-current="page" href="{% url 'pending_notice' %}">
+                    Pending
+                    {% if no_of_pending_notice > 0 %}
+                    <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ no_of_pending_notice }}
+                        <span class="visually-hidden"></span>
+                    </span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'print_history' %}">Print History</a>
+            </li>
+            <li class="nav-item dropdown me-4">
+                <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Reports <i class="fas fa-caret-down"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="settingsDropdown">
+                    <li><a class="dropdown-item" href="{% url 'daily_encoded_report' %}">Daily Encoded Data</a></li>
+                    <li><a class="dropdown-item" href="{% url 'reports' %}">Notice Status</a></li>
+                    <li><a class="dropdown-item" href="{% url 'occupancy_and_electrical_payments' %}">Occupancy and Electrical Payments</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown me-4">
+                <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Settings <i class="fas fa-caret-down"></i>
+                </a>
+
+
+                <ul class="dropdown-menu" aria-labelledby="settingsDropdown">
+                    <li><a class="dropdown-item" href="{% url 'holiday_table' %}">Holiday Setup</a></li>
+                    <li><a class="dropdown-item" href="{% url 'print_backside' %}" target="_blank">Print Backside</a></li>
+                    <li><a class="dropdown-item" href="{% url 'reprint_notice' %}">Reprint Notice (Noncompliant)</a></li>
+                    <li><a class="dropdown-item" href="{% url 'signatory_table' %}">Signatory Setup</a></li>
+                    <li>
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'database_table' %}">Database Table</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'audit_trail' %}">Audit Trail</a>
+                        {% endif %}
+                    </li>
+
+                </ul>
+            </li>
+            {% if add_button or edit_button %}
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'home' %}">Back</a>
+            </li>
+            {% endif %}
+            {% if add_holiday_button %}
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'holiday_table' %}">Back</a>
+            </li>
+            {% endif %}
+            {% if add_signatory_button %}
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'signatory_table' %}">Back</a>
+            </li>
+            {% endif %}
+            {% if edit_signatory_button %}
+            <li class="nav-item me-4">
+                <a class="nav-link" aria-current="page" href="{% url 'signatory_table' %}">Back</a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" style="color: rgb(130, 129, 129); opacity: 0.7;">Hello, {{ user.username }}</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
